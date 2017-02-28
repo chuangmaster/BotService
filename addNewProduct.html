@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="product/InsertProduct.php" method="GET">
+            <label>商品名稱</label><input type="text" name="ptName" /><br>
+            <label>售價</label><input type="number" name="ptPrice" min="0"  /><br>
+            <label>數量</label><input type="number" name="ptStock" min="0" /><br>
+            <label>圖檔名稱</label><input type="text" name="ptImgUrl" placeholder="例如:xxx.png"/><br>
+            <label>商品敘述</label><textarea name="ptDesc"></textarea><br>
+            <label>商品分類</label>
+            <select name="ptCategory">
+                <option value="00">化妝品</option>
+                <option value="200">衣服</option>
+                <option value="300">包款</option>
+                <option value="400">鞋子</option>
+            </select><br>
+            <label>商品型態</label>
+            <select name="ptType">
+                <option value="00">現貨</option>
+                <option value="10">預購</option>
+            </select><br>
+            <input type="submit" value="新增" /> 
+        </form>
+    </body>
+</html>
