@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/NetBeansPrj/BotService/config.php</file>
-            <file>file:/D:/NetBeansPrj/BotService/Register.php</file>
-            <file>file:/D:/NetBeansPrj/BotService/fb-callback.php</file>
-            <file>file:/D:/NetBeansPrj/BotService/index.php</file>
+            <file>file:/E:/BotService/index.php</file>
+            <file>file:/E:/BotService/product/InsertProduct.php</file>
+            <file>file:/E:/BotService/Management.php</file>
+            <file>file:/E:/BotService/addNewProduct.html</file>
+            <file>file:/E:/BotService/DBConect.php</file>
+            <file>file:/E:/BotService/Bot/sendMessage.php</file>
+            <file>file:/E:/BotService/config.php</file>
         </group>
     </open-files>
 </project-private>

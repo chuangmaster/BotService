@@ -5,8 +5,9 @@
  * User: Master
  * Date: 10/26/16
  */
-require_once 'config.php';
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/botservice/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/botservice/Bot/BotService.php';
+//require_once 'sendMessage.php';
 $hub_verify_token = null;
 
 if (isset($_REQUEST['hub_challenge'])) {
@@ -15,37 +16,66 @@ if (isset($_REQUEST['hub_challenge'])) {
 }
 
 
-if ($hub_verify_token === $verify_token) {
+if ($hub_verify_token === $GLOBALS['verify_token']) {
     echo $challenge;
 }
 $input = json_decode(file_get_contents('php://input'), true);
- file_put_contents ("fb.txt",file_get_contents('php://input'),FILE_APPEND);
+//file_put_contents("fb.txt", file_get_contents('php://input'), FILE_APPEND);
 //$pageid= $input['entry'][0]['id'];
 
 $sender = $input['entry'][0]['messaging'][0]['sender']['id'];
-$message = $input['entry'][0]['messaging'][0]['message']['text'];
+$message = '';
+if (!empty($input['entry'][0]['messaging'][0]['message']['text'])) {
+    $message = $input['entry'][0]['messaging'][0]['message']['text'];
+}
 $payload = null;
 $isText = True;
 $message_to_reply = "";
 if (!empty($message)) {
-    /* normal message*/
-//    switch ($message->) {
-//        case $value:
-//
-//
-//            break;
-//
-//        default:
-//            break;
-//    }
+    /* normal message */
+    $isSPNo = strpos($message, "#");
+    if ($isSPNo === 0 && $isSPNo !== "") {
+        $message_to_reply = "do u want to buy it?";
+        BotService::sendMessage(BotService::getJsonData(TRUE, $sender, $message_to_reply));
+        $message_to_reply = array(
+            'type' => 'template',
+            'payload' =>
+            array(
+                'template_type' => 'generic',
+                'elements' =>
+                array(
+                    array(
+                        "title" => "DanielWellington Classic Black Durham",
+                        "item_url" => "https://www.danielwellington.com/tw",
+                        "image_url" => "http://robot.iammaster.tw/assets/image/DW.png",
+                        "subtitle" => "Classic Black Durham有著漂亮的黑色錶盤、淡棕色美國真皮錶帶，絕對是真正收藏家的首選。經過植物油處理，Durham錶帶有著獨特的變色效果，能形成非常個性的精美光澤。",
+                        "buttons" =>
+                        array(
+                            array(
+                                "type" => "postback",
+                                "title" => "加入購物車",
+                                "payload" => "BUY_IT_WATCH",
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        BotService::sendMessage(BotService::getJsonData(FALSE, $sender, $message_to_reply));
+    } else {
+        $message_to_reply = $message;
+        BotService::sendMessage(BotService::getJsonData(TRUE, $sender, $message_to_reply));
+    }
 } else {
-    /**
-     * 	handle postback
-     */
-    $payload = $input['entry'][0]['messaging'][0]['postback']['payload'];
+    // 	handle postback
+    $isCoversation = TRUE;
+    $payload = '';
+    if (!empty($input['entry'][0]['messaging'][0]['postback']['payload'])) {
+        $payload = $input['entry'][0]['messaging'][0]['postback']['payload'];
+    }
     switch ($payload) {
         case 'Get Started':
-            $attachment = array(
+            $message_to_reply = array(
                 'type' => 'template',
                 'payload' =>
                 array(
@@ -79,7 +109,7 @@ if (!empty($message)) {
                     )
                 )
             );
-            $isText = false;
+            $isCoversation = FALSE;
             break;
         case 'BOT_INTRODUCTION':
             $message_to_reply = "哈囉！我是麥斯特的機器人賈維斯，協助他在不在位置上直接回答您問題！你可以從聊天的輸入框旁的三插入點獲得更多功能！";
@@ -88,7 +118,7 @@ if (!empty($message)) {
             $message_to_reply = "請問你要購買的商品編號是?";
             break;
         case 'BOT_SHOP':
-            $attachment = array(
+            $message_to_reply = array(
                 'type' => 'template',
                 'payload' =>
                 array(
@@ -131,63 +161,12 @@ if (!empty($message)) {
                     )
                 )
             );
-            $isText = false;
+            $isCoversation = FALSE;
             break;
         default :
             $message_to_reply = $payload;
             break;
     }
-}
-
-//API Url
-$url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' . $access_token;
-
-
-//Initiate cURL.
-$ch = curl_init($url);
-
-//The JSON data.
-
-if ($isText) {
-    $jsonData = array(
-        "recipient" => array(
-            "id" => $sender
-        ),
-        "message" => array(
-            "text" => $message_to_reply
-        )
-    );
-} else {
-    $jsonData = array(
-        'recipient' =>
-        array(
-            'id' => $sender
-        ),
-        'message' =>
-        array(
-            'attachment' => $attachment
-        ),
-    );
-}
-
-
-
-//Encode the array into JSON.
-$jsonDataEncoded = json_encode($jsonData);
-// $jsonDataEncoded = $jsonData;
-//Tell cURL that we want to send a POST request.
-curl_setopt($ch, CURLOPT_POST, 1);
-
-//Attach our encoded JSON string to the POST fields.
-curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-
-//Set the content type to application/json
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-//Execute the request
-if (!empty($input['entry'][0]['messaging'][0]['message'])) {
-    $result = curl_exec($ch);
-} else {
-    $result = curl_exec($ch);
+    BotService::sendMessage(BotService::getJsonData($isCoversation, $sender, $message_to_reply));
 }
 ?>

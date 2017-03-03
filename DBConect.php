@@ -1,11 +1,13 @@
 <?php
 
 require 'config.php';
+
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+function getConnection() {
+    $conn = new mysqli($GLOBALS["servername"], $GLOBALS["username"], $GLOBALS["password"], $GLOBALS["dbname"]);
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
 }
-$conn->set_charset("utf8")
-?>
