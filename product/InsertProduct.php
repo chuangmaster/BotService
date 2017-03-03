@@ -1,9 +1,10 @@
 <?php
 
-require_once '../config.php';
-require_once '../DBConect.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/botservice/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/botservice/DBConect.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/botservice/Product/ProductService.php';
 //$ptNo = $_REQUEST['ptNo'];
-$ptNo = "SP170228001";
+$ptNo = getNewProductID();
 $ptName = $_REQUEST['ptName'];
 $ptPrice = $_REQUEST['ptPrice'];
 $ptCategory = $_REQUEST['ptCategory'];
@@ -24,6 +25,7 @@ if (empty($ptNo)) {
 } else if (empty($ptStock)) {
     echo 'ptStock資料格式不符合，新增失敗';
 } else {
+    $conn = getConection();
     $insertSql = "INSERT INTO Product (ptNo,ptName,ptPrice,ptCategory,ptType,ptImgUrl,ptDesc,ptStock)
     VALUES ('{$ptNo}','{$ptName}','{$ptPrice}','{$ptCategory}','{$ptType}','{$ptImgUrl}','{$ptDesc}','{$ptStock}')";
     if ($conn->query($insertSql) === TRUE) {
