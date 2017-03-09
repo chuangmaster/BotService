@@ -1,3 +1,6 @@
 config.php
 Facebook/*
 nbproject/private/
+nbproject/private/private.xml
+*.xml
+nbproject/private/private.xml

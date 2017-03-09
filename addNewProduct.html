@@ -6,16 +6,16 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>新增商品</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <form action="Product/InsertProduct.php" method="GET">
+        <form action="Product/InsertProduct.php" method="POST" enctype="multipart/form-data">
             <label>商品名稱</label><input type="text" name="ptName" /><br>
             <label>售價</label><input type="number" name="ptPrice" min="0"  /><br>
             <label>數量</label><input type="number" name="ptStock" min="0" /><br>
-            <label>圖檔名稱</label><input type="text" name="ptImgUrl" placeholder="例如:xxx.png"/><br>
+            <label>圖檔(檔案最大3MB)</label><input type="file" name="ptImgUrl" id="ptImgUrl" /><br>
             <label>商品敘述</label><textarea name="ptDesc"></textarea><br>
             <label>商品分類</label>
             <select name="ptCategory">
